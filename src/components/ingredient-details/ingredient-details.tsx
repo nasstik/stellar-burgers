@@ -6,14 +6,11 @@ import { useSelector } from '../../services/store';
 import { getIngredients } from '../../services/slices/ingredientsSlice';
 
 export const IngredientDetails: FC = () => {
-  /** TODO: взять переменную из стора */
   const { id } = useParams<{ id: string }>();
 
-  // 2. Ищем нужный ингредиент в сторе
   const ingredientData = useSelector(getIngredients).find(
     (item) => item._id === id
   );
-
 
   if (!ingredientData) {
     return <Preloader />;

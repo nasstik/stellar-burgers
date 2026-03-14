@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react';
-import { useParams } from 'react-router-dom'; // Добавили для получения :number
-import { useSelector } from '../../services/store'; // Твой хук
+import { useParams } from 'react-router-dom';
+import { useSelector } from '../../services/store';
 import { getIngredients } from '../../services/slices/ingredientsSlice';
 import { getOrders, getFeedUserOrders } from '../../services/slices/feedSlice';
 import { Preloader } from '../ui/preloader';
@@ -9,9 +9,10 @@ import { TIngredient } from '@utils-types';
 
 export const OrderInfo: FC = () => {
   const { number } = useParams<{ number: string }>();
-  /** TODO: взять переменные orderData и ingredients из стора */
-  const allOrders = useSelector(getOrders).concat(useSelector(getFeedUserOrders));
-  
+  const allOrders = useSelector(getOrders).concat(
+    useSelector(getFeedUserOrders)
+  );
+
   const orderData = useMemo(
     () => allOrders.find((item) => item.number === Number(number)),
     [allOrders, number]
@@ -19,7 +20,6 @@ export const OrderInfo: FC = () => {
 
   const ingredients = useSelector(getIngredients);
 
-  /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {
     if (!orderData || !ingredients.length) return null;
 

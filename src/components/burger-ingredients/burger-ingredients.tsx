@@ -1,13 +1,12 @@
 import { useState, useRef, useEffect, FC, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { useSelector } from '../../services/store'; // Твой типизированный хук
+import { useSelector } from '../../services/store';
 import { getIngredients } from '../../services/slices/ingredientsSlice';
 
 import { TTabMode } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
 
 export const BurgerIngredients: FC = () => {
-  /** TODO: взять переменные из стора */
   const allIngredients = useSelector(getIngredients);
   const buns = useMemo(
     () => allIngredients.filter((item) => item.type === 'bun'),
@@ -58,7 +57,6 @@ export const BurgerIngredients: FC = () => {
     if (tab === 'sauce')
       titleSaucesRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
-
 
   return (
     <BurgerIngredientsUI

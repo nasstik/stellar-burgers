@@ -1,6 +1,6 @@
 import { FC, memo } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useDispatch } from '../../services/store'; // Твой типизированный хук
+import { useDispatch } from '../../services/store';
 import { addIngredient } from '../../services/slices/constructorSlice';
 
 import { BurgerIngredientUI } from '@ui';
@@ -11,7 +11,6 @@ export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
     const location = useLocation();
     const dispatch = useDispatch();
 
-    // Логика добавления ингредиента в конструктор
     const handleAdd = () => {
       dispatch(addIngredient(ingredient));
     };

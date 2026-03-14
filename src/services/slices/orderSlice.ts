@@ -1,19 +1,18 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { orderBurgerApi } from '../../utils/burger-api';
 import { TOrder } from '../../utils/types';
-import { RootState } from '../store'; 
+import { RootState } from '../store';
 
-// Экшен для отправки заказа
 export const placeOrder = createAsyncThunk(
   'order/placeOrder',
   async (ingredientIds: string[]) => {
     const res = await orderBurgerApi(ingredientIds);
-    return res.order; // Возвращает объект заказа с номером
+    return res.order;
   }
 );
 
 interface TOrderState {
-  orderData: TOrder | null;
+  orderData: Partial<TOrder> | TOrder | null;
   loading: boolean;
   error: string | null;
 }
@@ -21,14 +20,13 @@ interface TOrderState {
 const initialState: TOrderState = {
   orderData: null,
   loading: false,
-  error: null,
+  error: null
 };
 
 const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
-    // Очистка данных заказа (например, при закрытии модалки)
     clearOrder: (state) => {
       state.orderData = null;
     }

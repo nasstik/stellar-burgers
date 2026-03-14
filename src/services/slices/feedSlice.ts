@@ -2,13 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getFeedsApi, getOrdersApi } from '../../utils/burger-api';
 import { TOrder } from '../../utils/types';
 
-// Получение всех публичных заказов (для страницы /feed)
 export const fetchFeeds = createAsyncThunk(
   'feed/fetchFeeds',
   async () => await getFeedsApi()
 );
 
-// Получение личных заказов пользователя (для /profile/orders)
 export const fetchUserOrders = createAsyncThunk(
   'feed/fetchUserOrders',
   async () => await getOrdersApi()
@@ -38,8 +36,10 @@ const feedSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Публичная лента
-      .addCase(fetchFeeds.pending, (state) => { state.loading = true; })
+
+      .addCase(fetchFeeds.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(fetchFeeds.fulfilled, (state, action) => {
         state.loading = false;
         state.orders = action.payload.orders;
@@ -50,18 +50,21 @@ const feedSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Ошибка загрузки ленты';
       })
-      // Личные заказы
+
       .addCase(fetchUserOrders.fulfilled, (state, action) => {
-        state.userOrders = action.payload; // В API личных заказов обычно приходит просто массив
+        state.userOrders = action.payload;
       });
   }
 });
 
 export const getFeedState = (state: { feed: TFeedState }) => state.feed;
 export const getOrders = (state: { feed: TFeedState }) => state.feed.orders;
-export const getFeedUserOrders = (state: { feed: TFeedState }) => state.feed.userOrders;
-export const getFeedLoading = (state: { feed: TFeedState }) => state.feed.loading;
+export const getFeedUserOrders = (state: { feed: TFeedState }) =>
+  state.feed.userOrders;
+export const getFeedLoading = (state: { feed: TFeedState }) =>
+  state.feed.loading;
 export const getFeedTotal = (state: { feed: TFeedState }) => state.feed.total;
-export const getFeedTotalToday = (state: { feed: TFeedState }) => state.feed.totalToday;
+export const getFeedTotalToday = (state: { feed: TFeedState }) =>
+  state.feed.totalToday;
 
 export default feedSlice.reducer;

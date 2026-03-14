@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, nanoid } from '@reduxjs/toolkit';
 import { TIngredient, TConstructorIngredient } from '../../utils/types';
-import { RootState } from '../store'; 
+import { RootState } from '../store';
 import { placeOrder } from './orderSlice';
 
 interface TConstructorState {
@@ -17,7 +17,6 @@ const constructorSlice = createSlice({
   name: 'burgerConstructor',
   initialState,
   reducers: {
-    // Добавление ингредиента
     addIngredient: {
       reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
         if (action.payload.type === 'bun') {
@@ -26,25 +25,28 @@ const constructorSlice = createSlice({
           state.ingredients.push(action.payload);
         }
       },
-      // Подготовка данных: генерируем уникальный ID для каждого кусочка начинки
+
       prepare: (ingredient: TIngredient) => ({
         payload: { ...ingredient, id: nanoid() }
       })
     },
-    // Удаление ингредиента (по его уникальному ID)
+
     removeIngredient: (state, action: PayloadAction<string>) => {
       state.ingredients = state.ingredients.filter(
         (item) => item.id !== action.payload
       );
     },
-    // Сортировка (перетаскивание dnd)
-    moveIngredient: (state, action: PayloadAction<{ from: number; to: number }>) => {
+
+    moveIngredient: (
+      state,
+      action: PayloadAction<{ from: number; to: number }>
+    ) => {
       const { from, to } = action.payload;
       const movedItem = state.ingredients[from];
-      state.ingredients.splice(from, 1); // вырезаем
-      state.ingredients.splice(to, 0, movedItem); // вставляем
+      state.ingredients.splice(from, 1);
+      state.ingredients.splice(to, 0, movedItem);
     },
-    // Очистка конструктора после успешного заказа
+
     clearConstructor: (state) => {
       state.bun = null;
       state.ingredients = [];
@@ -58,9 +60,17 @@ const constructorSlice = createSlice({
   }
 });
 
-export const getConstructorState = (state: RootState) => state.burgerConstructor;
-export const getConstructorItems = (state: RootState) => state.burgerConstructor.ingredients;
-export const getConstructorBun = (state: RootState) => state.burgerConstructor.bun;
+export const getConstructorState = (state: RootState) =>
+  state.burgerConstructor;
+export const getConstructorItems = (state: RootState) =>
+  state.burgerConstructor.ingredients;
+export const getConstructorBun = (state: RootState) =>
+  state.burgerConstructor.bun;
 
-export const { addIngredient, removeIngredient, moveIngredient, clearConstructor } = constructorSlice.actions;
+export const {
+  addIngredient,
+  removeIngredient,
+  moveIngredient,
+  clearConstructor
+} = constructorSlice.actions;
 export default constructorSlice.reducer;
