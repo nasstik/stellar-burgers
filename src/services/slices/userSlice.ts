@@ -10,6 +10,7 @@ import {
 import { TUser } from '../../utils/types';
 import { setCookie, deleteCookie } from '../../utils/cookie';
 import { RootState } from '../store';
+import { updateUserApi } from '../../utils/burger-api';
 
 export const checkUserAuth = createAsyncThunk(
   'user/checkAuth',
@@ -41,6 +42,14 @@ export const logoutUser = createAsyncThunk('user/logout', async () => {
   localStorage.removeItem('refreshToken');
   deleteCookie('accessToken');
 });
+
+export const updateUser = createAsyncThunk(
+  'user/update',
+  async (data: Partial<TRegisterData>) => {
+    const res = await updateUserApi(data);
+    return res.user;
+  }
+);
 
 interface TUserState {
   user: TUser | null;
@@ -88,8 +97,13 @@ const userSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.error = action.error.message || 'Ошибка входа';
       })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isAuthChecked = true;
+      })
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
+        state.isAuthChecked = true;
       });
   }
 });
