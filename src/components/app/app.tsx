@@ -19,7 +19,7 @@ import {
 } from '@components';
 import { Preloader } from '@ui';
 import styles from './app.module.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../services/store';
 import { useEffect } from 'react';
 
 import { AppDispatch, RootState } from '../../services/store';
@@ -38,7 +38,7 @@ import {
 const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
 
   const background = location.state?.background;
 
