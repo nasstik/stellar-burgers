@@ -25,12 +25,11 @@ import constructorReducer, {
     };
   
     test('должен обрабатывать добавление ингредиента', () => {
-      // В редьюсере используется prepare с nanoid, поэтому проверяем структуру
       const newState = constructorReducer(initialState, addIngredient(mockIngredient));
       
       expect(newState.ingredients).toHaveLength(1);
       expect(newState.ingredients[0]).toEqual(expect.objectContaining(mockIngredient));
-      expect(newState.ingredients[0]).toHaveProperty('id'); // проверяем наличие сгенерированного nanoid
+      expect(newState.ingredients[0]).toHaveProperty('id'); 
     });
   
     test('должен обрабатывать добавление булки', () => {
@@ -60,7 +59,6 @@ import constructorReducer, {
         ]
       };
   
-      // Перемещаем с индекса 0 на индекс 1
       const newState = constructorReducer(
         stateWithItems, 
         moveIngredient({ from: 0, to: 1 })
