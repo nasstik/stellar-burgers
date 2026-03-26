@@ -16,6 +16,10 @@ describe('тестирование конструктора бургера', () 
 
     cy.wait('@getIngredients');
   });
+  afterEach(() => {
+    cy.clearCookie('accessToken');
+    localStorage.removeItem('refreshToken');
+  });
 
   it('должен добавлять булки и начинку', () => {
     cy.get('[data-cy="add-button"] button').first().click();
@@ -30,11 +34,22 @@ describe('тестирование конструктора бургера', () 
 
   describe('работа модальных окон', () => {
     it('открытие и закрытие модалки ингредиента по крестику', () => {
-      cy.get('[data-cy="ingredient-link"]').first().click();
-      cy.get('[data-cy="modal"]').should('be.visible'); 
-      cy.get('[data-cy="modal-close"]').should('be.visible').click();
-      cy.get('[data-cy="modal"]').should('not.exist');
-    });
+        cy.get('[data-cy="ingredient-link"]').first().as('selectedIngredient');
+        cy.get('@selectedIngredient')
+          .find('p')
+          .last() 
+          .invoke('text')
+          .then((ingredientName) => {
+            cy.get('@selectedIngredient').click();
+            cy.get('[data-cy="modal"]').should('be.visible');
+            cy.get('[data-cy="modal"]').should('contain', ingredientName.trim());
+          });
+  
+        cy.get('[data-cy="modal-close"]').click();
+        cy.get('[data-cy="modal"]').should('not.exist');
+      });
+  
+  
 
     it('закрытие модалки по клику на оверлей', () => {
       cy.get('[data-cy="ingredient-link"]').first().click();
